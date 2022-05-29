@@ -1,19 +1,13 @@
 import { StyleSheet, FlatList, Text, View } from "react-native";
 import React from "react";
+import ExpenseItem from "./ExpenseItem";
 
-function renderItemHandler({ item, index }) {
-  const { description, amount, date } = item;
-  return (
-    <View>
-      <View>
-        <Text>{description}</Text>
-        <Text>{date.toString()}</Text>
-      </View>
-      <View>
-        <Text>{amount}</Text>
-      </View>
-    </View>
-  );
+function pressHandler() {
+  console.log("pressed");
+}
+
+function renderItemHandler({ item }) {
+  return <ExpenseItem item={item} onPress={pressHandler} />;
 }
 
 export default function ExpenseList({ expenses }) {

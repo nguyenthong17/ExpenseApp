@@ -10,6 +10,7 @@ import AllExpenseScreen from "./screens/AllExpenseScreen";
 import RecentScreen from "./screens/RecentScreen";
 import ManageScreen from "./screens/ManageScreen";
 
+import IconButton from "./components/UI/IconButton";
 import { GlobalStyles } from "./const/Colors";
 
 export default function App() {
@@ -24,6 +25,9 @@ export default function App() {
           headerTintColor: "white",
           tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
           tabBarActiveTintColor: GlobalStyles.colors.accent500,
+          headerRight: ({ tintColor }) => (
+            <IconButton icon="md-add" size={24} color={tintColor} />
+          ),
         }}
       >
         <BottomTab.Screen
