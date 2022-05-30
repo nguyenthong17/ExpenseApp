@@ -12,6 +12,7 @@ import ManageScreen from "./screens/ManageScreen";
 
 import IconButton from "./components/UI/IconButton";
 import { GlobalStyles } from "./const/Colors";
+import ExpenseContextProvider from "./store/expense-context";
 
 export default function App() {
   const BottomTab = createBottomTabNavigator();
@@ -65,26 +66,28 @@ export default function App() {
 
   return (
     <>
-      <StatusBar style="auto" />
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
-            headerTintColor: "white",
-          }}
-        >
-          <Stack.Screen
-            name="ExpenseOverview"
-            component={ExpenseOverview}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ManageExpense"
-            component={ManageScreen}
-            options={{ presentation: "card" }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <StatusBar style="light" />
+      <ExpenseContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+              headerTintColor: "white",
+            }}
+          >
+            <Stack.Screen
+              name="ExpenseOverview"
+              component={ExpenseOverview}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ManageExpense"
+              component={ManageScreen}
+              options={{ presentation: "card" }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ExpenseContextProvider>
     </>
   );
 }
