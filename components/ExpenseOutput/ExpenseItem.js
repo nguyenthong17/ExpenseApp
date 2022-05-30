@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
 import React from "react";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 
 import { getFormattedDate } from "../../util/date";
 import { GlobalStyles } from "../../const/Colors";

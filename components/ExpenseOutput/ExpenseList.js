@@ -1,16 +1,19 @@
 import { StyleSheet, FlatList, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 import React from "react";
 import ExpenseItem from "./ExpenseItem";
 
-function pressHandler() {
-  console.log("pressed");
-}
-
-function renderItemHandler({ item }) {
-  return <ExpenseItem item={item} onPress={pressHandler} />;
-}
-
 export default function ExpenseList({ expenses }) {
+  const navigation = useNavigation();
+
+  function renderItemHandler({ item }) {
+    function pressHandler() {
+      navigation.navigate("ManageExpense", { expenseId: item.id });
+    }
+    return <ExpenseItem item={item} onPress={pressHandler} />;
+  }
+
   return (
     <FlatList
       data={expenses}

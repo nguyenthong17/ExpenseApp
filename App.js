@@ -20,15 +20,22 @@ export default function App() {
   function ExpenseOverview() {
     return (
       <BottomTab.Navigator
-        screenOptions={{
+        screenOptions={({ navigation }) => ({
           headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
           headerTintColor: "white",
           tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
           tabBarActiveTintColor: GlobalStyles.colors.accent500,
           headerRight: ({ tintColor }) => (
-            <IconButton icon="md-add" size={24} color={tintColor} />
+            <IconButton
+              icon="md-add"
+              size={24}
+              color={tintColor}
+              onPress={() => {
+                navigation.navigate("ManageExpense");
+              }}
+            />
           ),
-        }}
+        })}
       >
         <BottomTab.Screen
           name="RecentExpense"
@@ -47,8 +54,8 @@ export default function App() {
           options={{
             title: "All Expenses",
             tabBarLabel: "All Expenses",
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="calendar" size={size} color={color} />
+            tabBarIcon: ({ tintColor }) => (
+              <Ionicons name="calendar" size={24} color={tintColor} />
             ),
           }}
         />
@@ -60,13 +67,22 @@ export default function App() {
     <>
       <StatusBar style="auto" />
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+            headerTintColor: "white",
+          }}
+        >
           <Stack.Screen
             name="ExpenseOverview"
             component={ExpenseOverview}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="ManageExpense" component={ManageScreen} />
+          <Stack.Screen
+            name="ManageExpense"
+            component={ManageScreen}
+            options={{ presentation: "card" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>

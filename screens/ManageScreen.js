@@ -1,12 +1,76 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useLayoutEffect } from "react";
 
-export default function ManageScreen() {
+import IconButton from "../components/UI/IconButton";
+import { GlobalStyles } from "../const/Colors";
+import Button from "../components/UI/Button";
+
+export default function ManageScreen({ route, navigation }) {
+  const expenseId = route.params?.expenseId;
+  const isEditting = !!expenseId;
+
+  function deleteExpense() {
+    navigation.goBack();
+  }
+  function cancelHandler() {
+    navigation.goBack();
+  }
+  function confirmHandler() {
+    navigation.goBack();
+  }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: isEditting ? "Edit expense" : "Add new expense",
+    });
+  }, [navigation, isEditting]);
+
   return (
-    <View>
-      <Text>ManageScreen</Text>
+    <View style={styles.screenRoot}>
+      <View style={styles.buttonContainer}>
+        <Button mode="flat" onPress={cancelHandler} style={styles.button}>
+          Cancel
+        </Button>
+        <Button onPress={confirmHandler} style={styles.button}>
+          {isEditting ? "Update" : "Add"}
+        </Button>
+      </View>
+
+      {isEditting && (
+        <View style={styles.deleteContainer}>
+          <IconButton
+            icon="trash"
+            color={GlobalStyles.colors.error500}
+            size={36}
+            onPress={deleteExpense}
+          />
+        </View>
+      )}
+      {!isEditting && <Text>Add new item</Text>}
     </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  screenRoot: {
+    flex: 1,
+    backgroundColor: GlobalStyles.colors.primary800,
+    padding: 24,
+  },
+  deleteContainer: {
+    marginTop: 16,
+    paddingTop: 8,
+    borderTopWidth: 2,
+    borderTopColor: GlobalStyles.colors.primary200,
+    alignItems: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button: {
+    minWidth: 120,
+    marginHorizontal: 8,
+  },
+});
