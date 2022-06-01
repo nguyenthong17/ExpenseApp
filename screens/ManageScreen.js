@@ -3,8 +3,9 @@ import React, { useLayoutEffect, useContext } from "react";
 
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../const/Colors";
-import Button from "../components/UI/Button";
 import { ExpenseContext } from "../store/expense-context";
+import ManageForm from "../components/ManageExpense/ManageForm";
+import { postExpense } from "../util/http";
 
 export default function ManageScreen({ route, navigation }) {
   const expenseId = route.params?.expenseId;
@@ -13,6 +14,12 @@ export default function ManageScreen({ route, navigation }) {
   const { deleteExpense, updateExpense, addExpense } =
     useContext(ExpenseContext);
 
+  const selectedExpense =
+    isEditting &&
+    useContext(ExpenseContext).expense.find(
+      (expense) => expense.id === expenseId
+    );
+
   function deleteHandler() {
     deleteExpense(expenseId);
     navigation.goBack();
@@ -20,11 +27,13 @@ export default function ManageScreen({ route, navigation }) {
   function cancelHandler() {
     navigation.goBack();
   }
-  function confirmHandler() {
+  function confirmHandler(expense) {
     if (isEditting) {
-      updateExpense(expenseId, {}); //add later
+      updateExpense(expenseId, expense);
     } else {
-      addExpense({}); //add later
+      postExpense(expense).then((id) => {
+        addExpense({ ...expense, id });
+      });
     }
     navigation.goBack();
   }
@@ -37,14 +46,13 @@ export default function ManageScreen({ route, navigation }) {
 
   return (
     <View style={styles.screenRoot}>
-      <View style={styles.buttonContainer}>
-        <Button mode="flat" onPress={cancelHandler} style={styles.button}>
-          Cancel
-        </Button>
-        <Button onPress={confirmHandler} style={styles.button}>
-          {isEditting ? "Update" : "Add"}
-        </Button>
-      </View>
+      <ManageForm
+        submitTitleText={isEditting ? "Update" : "Add"}
+        onCancel={cancelHandler}
+        onSubmit={confirmHandler}
+        selectedExpense={selectedExpense ? selectedExpense : null}
+        isEditting={isEditting}
+      />
 
       {isEditting && (
         <View style={styles.deleteContainer}>
@@ -56,7 +64,6 @@ export default function ManageScreen({ route, navigation }) {
           />
         </View>
       )}
-      {!isEditting && <Text>Add new item</Text>}
     </View>
   );
 }
@@ -73,14 +80,5 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderTopColor: GlobalStyles.colors.primary200,
     alignItems: "center",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  button: {
-    minWidth: 120,
-    marginHorizontal: 8,
   },
 });
