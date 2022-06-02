@@ -6,6 +6,7 @@ export const ExpenseContext = createContext({
   setExpense: (expense) => {},
   deleteExpense: (id) => {},
   updateExpense: (id, { description, date, amount }) => {},
+  setIsLoading: (isLoading) => {},
 });
 
 function expenseReducer(state, action) {
